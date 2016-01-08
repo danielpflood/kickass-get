@@ -199,7 +199,6 @@ def page_torrents_traverser(options):
 
         pool.close()
         pool.join()
-        break;
 
     elif options.csvfile or options.magnet2file:
         while True:

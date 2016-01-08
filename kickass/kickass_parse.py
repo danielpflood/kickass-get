@@ -188,8 +188,20 @@ def page_torrents_traverser(options):
         
     # except requests.exceptions.ConnectionError:
     #     print 'ConnectionError. Prepare to dump current data.'
-    
-    if options.csvfile or options.magnet2file or options.torrents:
+    if options.torrents:
+        pool = Pool(processes=options.workers)
+        # for torrent in all_torrents:
+        #     torrent.save_to_file(usr_input)
+        # 
+        # multiprocessing save torrents to files
+
+        pool.map(lambda x: x.save_to_file("/Users/danielpflood/tors_from_kat"), all_torrents)
+
+        pool.close()
+        pool.join()
+        break;
+
+    elif options.csvfile or options.magnet2file:
         while True:
             usr_input = raw_input("Enter the path to store file(s) to (q to quit): ").strip()
             if os.path.exists(usr_input):
@@ -199,20 +211,6 @@ def page_torrents_traverser(options):
 
                 if options.magnet2file:
                     write_torrents_to_file(all_torrents, usr_input, True) # write magnet links to file
-
-                if options.torrents:
-                    pool = Pool(processes=options.workers)
-
-                    # for torrent in all_torrents:
-                    #     torrent.save_to_file(usr_input)
-                    # 
-                    # multiprocessing save torrents to files
-
-                    pool.map(lambda x: x.save_to_file(usr_input), all_torrents)
-
-                    pool.close()
-                    pool.join()
-                    break;
 
             elif usr_input == 'q':
                 break;
